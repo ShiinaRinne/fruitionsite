@@ -1,7 +1,8 @@
 /* CONFIGURATION STARTS HERE */
 
 /* Step 1: enter your domain name like fruitionsite.com */
-const MY_DOMAIN = "fruitionsite.com";
+  const MY_DOMAIN = 'blog.youngmoe.com';
+  const MY_NOTION_DOMAIN = 'shiinarinne.notion.site'
 
 /*
  * Step 2: enter your URL slug to page ID mapping
@@ -9,19 +10,15 @@ const MY_DOMAIN = "fruitionsite.com";
  * The value on the right is the Notion page ID
  */
 const SLUG_TO_PAGE = {
-  "": "771ef38657244c27b9389734a9cbff44",
-  thanks: "9d9864f5338b47b0a7f42e0f0e2bbf46",
-  showcase: "92053970e5084019ac096d2df7e7f440",
-  roadmap: "7d4b21bfb4534364972e8bf9f68c2c36"
+    '': '76a9ec889ed94f5e9941cd57cbf5f1f6',
 };
 
 /* Step 3: enter your page title and description for SEO purposes */
-const PAGE_TITLE = "Fruition";
-const PAGE_DESCRIPTION =
-  "Free, Open Source Toolkit For Customizing Your Notion Page";
+  const PAGE_TITLE = "ym's blog";
+  const PAGE_DESCRIPTION = ".";
 
 /* Step 4: enter a Google Font name, you can choose from https://fonts.google.com */
-const GOOGLE_FONT = "Rubik";
+  const GOOGLE_FONT = '';
 
 /* Step 5: enter any custom scripts you'd like */
 const CUSTOM_SCRIPT = ``;
@@ -122,11 +119,6 @@ async function fetchAndApply(request) {
   } else if (slugs.indexOf(url.pathname.slice(1)) > -1) {
     const pageId = SLUG_TO_PAGE[url.pathname.slice(1)];
     return Response.redirect("https://" + MY_DOMAIN + "/" + pageId, 301);
-  } else if (
-    pages.indexOf(url.pathname.slice(1)) === -1 &&
-    url.pathname.slice(1).match(/[0-9a-f]{32}/)
-  ) {
-    return Response.redirect('https://' + MY_DOMAIN, 301);
   } else {
     response = await fetch(url.toString(), {
       body: request.body,
@@ -186,12 +178,19 @@ class HeadRewriter {
         }
       );
     }
+    // 3: Comment
+    // 4: Search
+    // 5: Duplicate
+    // 6: ...
+    // 7: |
+    // 8: Try Notion
     element.append(
       `<style>
       div.notion-topbar > div > div:nth-child(3) { display: none !important; }
-      div.notion-topbar > div > div:nth-child(4) { display: none !important; }
       div.notion-topbar > div > div:nth-child(5) { display: none !important; }
       div.notion-topbar > div > div:nth-child(6) { display: none !important; }
+      div.notion-topbar > div > div:nth-child(7) { display: none !important; }
+      div.notion-topbar > div > div:nth-child(8) { display: none !important; }
       div.notion-topbar-mobile > div:nth-child(3) { display: none !important; }
       div.notion-topbar-mobile > div:nth-child(4) { display: none !important; }
       div.notion-topbar > div > div:nth-child(1n).toggle-mode { display: block !important; }
@@ -217,6 +216,39 @@ class BodyRewriter {
       const slugs = [];
       const pages = [];
       const el = document.createElement('div');
+
+      // ========================
+      // [ym add]
+      // Comment & Duplicate
+      const topEl = document.createElement('div');
+      topEl.innerHTML = '<svg viewBox="0 0 16 16" class="speechBubbleThin" style="width: 14px; height: 14px; display: block; fill: inherit; flex-shrink: 0; backface-visibility: hidden; margin-right: 6px;"><path d="M4.73926 15.6797C5.12207 15.6797 5.40918 15.4951 5.87402 15.085L8.21875 13.0068H12.3545C14.4121 13.0068 15.5674 11.8311 15.5674 9.80078V4.49609C15.5674 2.46582 14.4121 1.29004 12.3545 1.29004H3.63867C1.58105 1.29004 0.425781 2.46582 0.425781 4.49609V9.80078C0.425781 11.8311 1.6084 13.0068 3.59082 13.0068H3.87109V14.6953C3.87109 15.3037 4.19238 15.6797 4.73926 15.6797ZM5.07422 14.1758V12.2275C5.07422 11.8242 4.90332 11.667 4.51367 11.667H3.67285C2.38086 11.667 1.76562 11.0176 1.76562 9.75977V4.53711C1.76562 3.2793 2.38086 2.62988 3.67285 2.62988H12.3135C13.6055 2.62988 14.2275 3.2793 14.2275 4.53711V9.75977C14.2275 11.0176 13.6055 11.667 12.3135 11.667H8.14355C7.7334 11.667 7.52832 11.7354 7.24121 12.0361L5.07422 14.1758ZM4.51367 5.35059H11.4043C11.6367 5.35059 11.8281 5.15918 11.8281 4.91992C11.8281 4.69434 11.6367 4.50293 11.4043 4.50293H4.51367C4.28125 4.50293 4.09668 4.69434 4.09668 4.91992C4.09668 5.15918 4.28125 5.35059 4.51367 5.35059ZM4.51367 7.53125H11.4043C11.6367 7.53125 11.8281 7.33301 11.8281 7.10059C11.8281 6.86816 11.6367 6.67676 11.4043 6.67676H4.51367C4.28125 6.67676 4.09668 6.86816 4.09668 7.10059C4.09668 7.33301 4.28125 7.53125 4.51367 7.53125ZM4.51367 9.70508H9.00488C9.2373 9.70508 9.42188 9.51367 9.42188 9.28125C9.42188 9.04199 9.2373 8.85742 9.00488 8.85742H4.51367C4.28125 8.85742 4.09668 9.04199 4.09668 9.28125C4.09668 9.51367 4.28125 9.70508 4.51367 9.70508Z"></path></svg>Comment & Duplicate'
+      topEl.className = 'notion-focusable';
+      topEl.title = 'After clicking, you will be redirected to the original page on Notion. You can then use Comment and Duplicate features on the new page.'
+      topEl.style.userSelect = 'none';
+      topEl.style.transition = 'background 20ms ease-in 0s';
+      topEl.style.cursor = 'pointer';
+      topEl.style.display = 'inline-flex';
+      topEl.style.alignItems = 'center';
+      topEl.style.justifyContent = 'center';
+      topEl.style.whiteSpace = 'nowrap';
+      topEl.style.borderRadius = '4px';
+      topEl.style.height = '32px';
+      topEl.style.padding = '0px 8px';
+      topEl.style.fontSize = '14px';
+      topEl.style.lineHeight = '1.2';
+      topEl.style.border = '1px solid rgba(55, 53, 47, 0.16)';
+      topEl.style.marginRight = '8px';
+
+      // Split Line
+      const splitLineEl = document.createElement('div');
+      splitLineEl.style.flex = '0 0 auto';
+      splitLineEl.style.width = '1px';
+      splitLineEl.style.height = '16px';
+      splitLineEl.style.marginLeft = '8px';
+      splitLineEl.style.marginRight = '8px';
+      splitLineEl.style.background = 'rgba(55, 53, 47, 0.16)';
+      // ========================
+
       let redirected = false;
       Object.keys(SLUG_TO_PAGE).forEach(slug => {
         const page = SLUG_TO_PAGE[slug];
@@ -253,6 +285,26 @@ class BodyRewriter {
           onDark();
         }
       }
+
+      // ====================
+      // [ym add]
+      function oneMoreButton(nav){
+        topEl.addEventListener("click",function(event){
+          sourceUrl = window.location.href.replace('${MY_DOMAIN}','${MY_NOTION_DOMAIN}');
+          window.location.href = sourceUrl.length <= ('https://${MY_NOTION_DOMAIN}/').length ? sourceUrl + SLUG_TO_PAGE[''] : sourceUrl;
+        });
+        topEl.addEventListener("mouseover", function() {
+          topEl.style.background = "rgb(225, 225, 225)";
+        });
+        topEl.addEventListener("mouseout", function() {
+          topEl.style.background = "none";
+        });
+
+        nav.children[0].appendChild(topEl);
+        nav.children[0].appendChild(splitLineEl);
+      }
+      // ====================
+
       function addDarkModeButton(device) {
         const nav = device === 'web' ? document.querySelector('.notion-topbar').firstChild : document.querySelector('.notion-topbar-mobile');
         el.className = 'toggle-mode';
@@ -279,6 +331,12 @@ class BodyRewriter {
           || mobileNav && mobileNav.firstChild) {
           redirected = true;
           updateSlug();
+
+          // =====================
+          // [ym add]
+          oneMoreButton(nav);
+          // =====================
+
           addDarkModeButton(nav ? 'web' : 'mobile');
           const onpopstate = window.onpopstate;
           window.onpopstate = function() {
